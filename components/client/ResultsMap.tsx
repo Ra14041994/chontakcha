@@ -46,8 +46,11 @@ export function ResultsMap({ items, center, me, listHref }: { items: MapItem[]; 
       }),
     [groups],
   )
+  // sel — belgi bosilganda ro‘yxat shu do‘konga toraytiriladi; hover — kartaga sichqoncha olib borilganda belgi faqat ajratiladi.
   const [sel, setSel] = useState<string | null>(null)
+  const [hover, setHover] = useState<string | null>(null)
   const shown = sel ? groups.get(sel) || [] : items
+  const selName = sel ? groups.get(sel)?.[0]?.biz_name : null
   return (
     <div className="map-layout">
       <div className="map-sheet">
@@ -59,9 +62,16 @@ export function ResultsMap({ items, center, me, listHref }: { items: MapItem[]; 
             </Link>
           </div>
         )}
+        {selName && (
+          <div className="mb8" style={{ pointerEvents: 'auto' }}>
+            <button type="button" className="chip on sm" onClick={() => setSel(null)} aria-label="Barcha natijalarni ko‘rsatish">
+              {selName} <Icon name="x" size={14} />
+            </button>
+          </div>
+        )}
         <div className="map-strip">
           {shown.slice(0, 60).map((it) => (
-            <Link key={it.id} href={`/e/${it.id}`} className="map-card" onMouseEnter={() => setSel(it.biz_id)}>
+            <Link key={it.id} href={`/e/${it.id}`} className="map-card" onMouseEnter={() => setHover(it.biz_id)} onMouseLeave={() => setHover(null)}>
               <span className="ph">{it.photo ? <img src={it.photo} alt="" loading="lazy" /> : null}</span>
               <span className="grow" style={{ minWidth: 0 }}>
                 <span className="b ellipsis" style={{ display: 'block' }}>
@@ -80,7 +90,7 @@ export function ResultsMap({ items, center, me, listHref }: { items: MapItem[]; 
         </div>
       </div>
       <div className="map-full mapbox" style={{ borderRadius: 0, border: 0 }}>
-        <MapView points={points} center={center} zoom={14} me={me} selected={sel} onSelect={(id) => setSel((x) => (x === id ? null : id))} />
+        <MapView points={points} center={center} zoom={14} me={me} selected={sel ?? hover} onSelect={(id) => setSel((x) => (x === id ? null : id))} />
       </div>
     </div>
   )
