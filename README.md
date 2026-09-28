@@ -23,6 +23,16 @@ Lokal rejimda hech qanday kalit shart emas: baza `.data/pglite` ichida (PGlite),
 
 ## Vercel’ga joylash
 
+### Bir tugma bilan (tavsiya)
+
+[![Vercel’ga joylash](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FRa14041994%2Fchontakcha&project-name=chontakcha-uz&repository-name=chontakcha&env=TELEGRAM_BOT_TOKEN%2CADMIN_PHONES&envDescription=TELEGRAM_BOT_TOKEN%20-%20%40BotFather%20bergan%20bot%20tokeni.%20ADMIN_PHONES%20-%20admin%20telefon%20raqami%2C%20masalan%20%2B998943150700&stores=%5B%7B%22type%22%3A%22integration%22%2C%22protocol%22%3A%22storage%22%2C%22productSlug%22%3A%22neon%22%2C%22integrationSlug%22%3A%22neon%22%7D%2C%7B%22type%22%3A%22blob%22%2C%22access%22%3A%22public%22%7D%5D)
+
+Tugma repozitoriyani GitHub akkauntingizga nusxalaydi, Neon Postgres bazasi va public Blob omborini o‘zi yaratib ulaydi, `TELEGRAM_BOT_TOKEN` va `ADMIN_PHONES` qiymatlarini so‘raydi. Neon mintaqasi: *Frankfurt*.
+
+Sayt ochilganda Vercel login so‘ralsa: **Settings → Deployment Protection → Vercel Authentication → Standard Protection** (production domeni ochiq bo‘lishi shart — aks holda Telegram webhook ishlamaydi).
+
+### Qo‘lda
+
 1. Loyiha GitHub’dan import qilinadi (framework: Next.js).
 2. **Storage → Neon (Postgres)** — bazani yarating va loyihaga ulang (`DATABASE_URL` avtomatik qo‘shiladi). Mintaqa: *Frankfurt (eu-central-1)*.
 3. **Storage → Blob** — public store yarating va ulang (`BLOB_READ_WRITE_TOKEN`).
