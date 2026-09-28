@@ -13,7 +13,7 @@ import { uploadImage } from './upload'
 
 const DAY_NAMES = ['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya']
 
-export function BusinessForm({ initial, blobEnabled }: { initial: BusinessInput; blobEnabled: boolean }) {
+export function BusinessForm({ initial }: { initial: BusinessInput }) {
   const [b, setBiz] = useState<BusinessInput>({ ...initial, phone: initial.phone ? initial.phone.replace(/^\+998/, '') : '' })
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
@@ -52,9 +52,11 @@ export function BusinessForm({ initial, blobEnabled }: { initial: BusinessInput;
               if (!f) return
               setBusy(true)
               try {
-                set({ logo_url: await uploadImage(f, 'b', blobEnabled, 512) })
+                set({ logo_url: await uploadImage(f, 'b', 512) })
               } catch (x) {
-                toast(x instanceof Error ? x.message : 'Yuklanmadi')
+                const m = x instanceof Error ? x.message : 'Yuklanmadi'
+                setErr(m)
+                toast(m)
               } finally {
                 setBusy(false)
               }

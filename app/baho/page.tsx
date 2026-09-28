@@ -34,7 +34,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: Promi
         ) : biz.owner_id === u.id ? (
           <Note tone="amber">O‘z biznesingizga baho qo‘ya olmaysiz.</Note>
         ) : (
-          <ReviewForm listings={listings} initialListing={initialListing} bookingId={sp.bk} blobEnabled={Boolean(process.env.BLOB_READ_WRITE_TOKEN)} userName={shortName(u.name)} initial={existing} />
+          <ReviewForm listings={listings} initialListing={initialListing} bookingId={sp.bk} userName={shortName(u.name)} initial={existing} />
         )}
       </div>
     </Shell>

@@ -17,7 +17,6 @@ export default async function BusinessInfoPage() {
           </div>
         </div>
         <BusinessForm
-          blobEnabled={Boolean(process.env.BLOB_READ_WRITE_TOKEN)}
           initial={{
             name: b.name,
             category: b.category,

@@ -17,7 +17,6 @@ export default async function NewListingPage() {
         <ListingWizard
           initial={EMPTY_LISTING}
           business={b ? { name: b.name, address: b.address, phone: b.phone, delivery: b.delivery, delivery_fee: b.delivery_fee, delivery_eta: b.delivery_eta, delivery_area: b.delivery_area } : null}
-          blobEnabled={Boolean(process.env.BLOB_READ_WRITE_TOKEN)}
           userPhone={u.phone}
           areaId={v.areaId}
           editing={false}

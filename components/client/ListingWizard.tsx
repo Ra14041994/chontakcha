@@ -40,12 +40,14 @@ function emptyBiz(area: string, phone: string | null): BusinessInput {
   }
 }
 
-function PhotoPicker({ photos, setPhotos, blobEnabled }: { photos: string[]; setPhotos: (fn: (p: string[]) => string[]) => void; blobEnabled: boolean }) {
+function PhotoPicker({ photos, setPhotos }: { photos: string[]; setPhotos: (fn: (p: string[]) => string[]) => void }) {
   const [busy, setBusy] = useState(0)
+  const [err, setErr] = useState<string | null>(null)
   const cam = useRef<HTMLInputElement>(null)
   const gal = useRef<HTMLInputElement>(null)
   const add = async (files: FileList | null) => {
     if (!files?.length) return
+    setErr(null)
     const room = MAX_PHOTOS - photos.length
     const list = Array.from(files).slice(0, Math.max(0, room))
     if (files.length > room) toast(`Ko‘pi bilan ${MAX_PHOTOS} ta rasm`)
@@ -53,10 +55,10 @@ function PhotoPicker({ photos, setPhotos, blobEnabled }: { photos: string[]; set
     await Promise.all(
       list.map(async (f) => {
         try {
-          const url = await uploadImage(f, 'l', blobEnabled)
+          const url = await uploadImage(f, 'l')
           setPhotos((p) => (p.length < MAX_PHOTOS ? [...p, url] : p))
         } catch (e) {
-          toast(e instanceof Error ? e.message : 'Rasm yuklanmadi')
+          setErr(e instanceof Error ? e.message : 'Rasm yuklanmadi')
         } finally {
           setBusy((n) => n - 1)
         }
@@ -126,6 +128,11 @@ function PhotoPicker({ photos, setPhotos, blobEnabled }: { photos: string[]; set
             </button>
           ))}
       </div>
+      {err && (
+        <p className="err" role="alert">
+          {err}
+        </p>
+      )}
     </>
   )
 }
@@ -196,14 +203,12 @@ function PreviewCard({ d, biz }: { d: ListingInput; biz: { name: string; address
 export function ListingWizard({
   initial,
   business,
-  blobEnabled,
   userPhone,
   areaId,
   editing,
 }: {
   initial: ListingInput
   business: BizInfo
-  blobEnabled: boolean
   userPhone: string | null
   areaId: string
   editing: boolean
@@ -426,7 +431,7 @@ export function ListingWizard({
               </div>
               <h2 className="mt20">Rasmlarni qo‘shing</h2>
               <p className="muted mt4">Birinchi rasm — asosiy. {MAX_PHOTOS} tagacha. Rasm avtomatik kichraytiriladi.</p>
-              <PhotoPicker photos={d.photos} setPhotos={(fn) => setD((x) => ({ ...x, photos: fn(x.photos) }))} blobEnabled={blobEnabled} />
+              <PhotoPicker photos={d.photos} setPhotos={(fn) => setD((x) => ({ ...x, photos: fn(x.photos) }))} />
               <div className="card mt16">
                 <b>Yaxshi rasm uchun</b>
                 <div className="checklist mt10">
@@ -681,7 +686,7 @@ export function ListingWizard({
                       if (!f) return
                       setLogoBusy(true)
                       try {
-                        setB({ logo_url: await uploadImage(f, 'b', blobEnabled, 512) })
+                        setB({ logo_url: await uploadImage(f, 'b', 512) })
                       } catch (x) {
                         toast(x instanceof Error ? x.message : 'Yuklanmadi')
                       } finally {

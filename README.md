@@ -35,7 +35,7 @@ Sayt ochilganda Vercel login so‘ralsa: **Settings → Deployment Protection �
 
 1. Loyiha GitHub’dan import qilinadi (framework: Next.js).
 2. **Storage → Neon (Postgres)** — bazani yarating va loyihaga ulang (`DATABASE_URL` avtomatik qo‘shiladi). Mintaqa: *Frankfurt (eu-central-1)*.
-3. **Storage → Blob** — public store yarating va ulang (`BLOB_READ_WRITE_TOKEN`).
+3. **Storage → Blob** — public store yarating va loyihaga ulang (Vercel `BLOB_STORE_ID` — OIDC — yoki `BLOB_READ_WRITE_TOKEN` qo‘shadi; ikkalasi ham ishlaydi). Rasmlar server orqali yuklanadi (`/api/upload`). Holatni `/admin` → Sozlama → “Rasm ombori”da ko‘rish mumkin.
 4. Environment Variables: `SESSION_SECRET`, `TELEGRAM_BOT_TOKEN` (Sensitive), `ADMIN_PHONES`, `CRON_SECRET`, ixtiyoriy `SEED_SAMPLE=0`.
 5. Redeploy. Jadval va namuna ma’lumotlar birinchi so‘rovda avtomatik yaratiladi. Telegram webhook birinchi “Telegram orqali kirish” bosilganda o‘rnatiladi (yoki `/admin` → Sozlama).
 

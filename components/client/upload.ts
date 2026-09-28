@@ -1,5 +1,4 @@
 'use client'
-import { upload } from '@vercel/blob/client'
 
 async function loadImage(file: File): Promise<HTMLImageElement> {
   const url = URL.createObjectURL(file)
@@ -42,20 +41,29 @@ export async function compressImage(file: File, max = 1280, quality = 0.82): Pro
   return blob
 }
 
-/** Rasmni yuklash: Vercel Blob (productionda) yoki lokal papka (ishlab chiqishda). URL qaytaradi. */
-export async function uploadImage(file: File, prefix: 'l' | 'b' | 'r', blobEnabled: boolean, max = 1280): Promise<string> {
+/**
+ * Rasmni yuklash: brauzerda kichraytiriladi (JPEG), keyin serverga yuboriladi —
+ * server uni Vercel Blob’ga (productionda) yoki lokal papkaga yozadi. URL qaytaradi.
+ */
+export async function uploadImage(file: File, prefix: 'l' | 'b' | 'r', max = 1280): Promise<string> {
   if (!file.type.startsWith('image/') && !/\.(heic|heif|jpe?g|png|webp)$/i.test(file.name)) throw new Error('Faqat rasm yuklash mumkin')
   if (file.size > 30 * 1024 * 1024) throw new Error('Rasm juda katta (30 MB dan oshmasin)')
-  const blob = await compressImage(file, max)
-  const name = `${prefix}/${Date.now().toString(36)}.jpg`
-  if (blobEnabled) {
-    const r = await upload(name, blob, { access: 'public', handleUploadUrl: '/api/upload', contentType: 'image/jpeg' })
-    return r.url
+  let blob: Blob
+  try {
+    blob = await compressImage(file, max)
+  } catch {
+    throw new Error('Bu rasmni o‘qib bo‘lmadi. Boshqa rasm tanlang (JPG yoki PNG).')
   }
   const fd = new FormData()
+  fd.append('kind', prefix)
   fd.append('file', new File([blob], 'photo.jpg', { type: 'image/jpeg' }))
-  const r = await fetch('/api/upload/local', { method: 'POST', body: fd })
-  const j = (await r.json()) as { url?: string; error?: string }
-  if (!r.ok || !j.url) throw new Error(j.error || 'Yuklashda xato')
+  let r: Response
+  try {
+    r = await fetch('/api/upload', { method: 'POST', body: fd })
+  } catch {
+    throw new Error('Internet aloqasini tekshirib, qayta urinib ko‘ring')
+  }
+  const j = (await r.json().catch(() => ({}))) as { url?: string; error?: string }
+  if (!r.ok || !j.url) throw new Error(j.error || 'Rasm yuklanmadi, qayta urinib ko‘ring')
   return j.url
 }

@@ -9,7 +9,7 @@ import { uploadImage } from './upload'
 
 const WORDS = ['', 'Yomon', 'Qoniqarsiz', 'O‘rtacha', 'Yaxshi', 'A’lo']
 
-export function ReviewForm({ listings, initialListing, bookingId, blobEnabled, userName, initial }: { listings: { id: string; title: string }[]; initialListing: string; bookingId?: string; blobEnabled: boolean; userName: string; initial?: { rating: number; tags: string[]; body: string } | null }) {
+export function ReviewForm({ listings, initialListing, bookingId, userName, initial }: { listings: { id: string; title: string }[]; initialListing: string; bookingId?: string; userName: string; initial?: { rating: number; tags: string[]; body: string } | null }) {
   const [lid, setLid] = useState(initialListing)
   const [rating, setRating] = useState(initial?.rating || 0)
   const [tags, setTags] = useState<string[]>(initial?.tags || [])
@@ -83,7 +83,7 @@ export function ReviewForm({ listings, initialListing, bookingId, blobEnabled, u
                 if (!f) return
                 setBusy(true)
                 try {
-                  setPhoto(await uploadImage(f, 'r', blobEnabled, 1024))
+                  setPhoto(await uploadImage(f, 'r', 1024))
                 } catch (x) {
                   toast(x instanceof Error ? x.message : 'Yuklanmadi')
                 } finally {

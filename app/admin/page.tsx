@@ -7,6 +7,7 @@ import { subInfo } from '@/lib/business'
 import { dateShort, money, phonePretty, relShort } from '@/lib/format'
 import { telegramEnabled, tgCall } from '@/lib/telegram'
 import { appUrl } from '@/lib/url'
+import { blobLabel } from '@/lib/blob'
 import { Shell, TopBack } from '@/components/shell'
 import { Icon } from '@/components/Icon'
 import { Note } from '@/components/ui'
@@ -269,7 +270,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <div className="card">
           <h3>Muhit</h3>
           <div className="kv"><span className="k">Sayt manzili</span><span className="v">{appUrl()}</span></div>
-          <div className="kv"><span className="k">Rasm ombori</span><span className="v">{process.env.BLOB_READ_WRITE_TOKEN ? 'Vercel Blob ✓' : 'Ulanmagan'}</span></div>
+          <div className="kv"><span className="k">Rasm ombori</span><span className="v">{blobLabel()}</span></div>
           <div className="kv"><span className="k">Baza</span><span className="v">{process.env.DATABASE_URL || process.env.POSTGRES_URL ? 'Postgres ✓' : 'Lokal'}</span></div>
         </div>
       </div>
