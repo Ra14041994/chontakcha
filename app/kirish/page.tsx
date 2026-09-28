@@ -42,13 +42,18 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           )}
           <div className="steps">
             <div>
-              <b className="n">1</b> “Telegram orqali kirish” tugmasini bosing — Telegram ochiladi.
+              <b className="n">1</b>
+              <span>“Telegram orqali kirish” tugmasini bosing — Telegram ochiladi.</span>
             </div>
             <div>
-              <b className="n">2</b> Botda <b>Start</b>, keyin <b>“Raqamni yuborish”</b>ni bosing.
+              <b className="n">2</b>
+              <span>
+                Botda <b>Start</b>, keyin <b>“Raqamni yuborish”</b>ni bosing.
+              </span>
             </div>
             <div>
-              <b className="n">3</b> Saytga qayting — avtomatik kirasiz.
+              <b className="n">3</b>
+              <span>Saytga qayting — avtomatik kirasiz.</span>
             </div>
           </div>
         </div>

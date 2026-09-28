@@ -11,6 +11,16 @@ export async function GET(req: Request) {
   const secret = process.env.CRON_SECRET
   if (secret && req.headers.get('authorization') !== `Bearer ${secret}`) return new Response('unauthorized', { status: 401 })
   const out: Record<string, number> = {}
+  const today = new Date(Date.now() + 5 * 3600e3).toISOString().slice(0, 10)
+  // Bir kunda faqat bir marta eslatma yuboriladi (qayta chaqirilsa — faqat tozalash).
+  const first = await q(
+    `insert into meta (k, v) values ('cron_day', $1) on conflict (k) do update set v = excluded.v where meta.v <> excluded.v returning k`,
+    [today],
+  )
+  if (!first.length) {
+    await q(`delete from login_tokens where created_at < now() - interval '2 days'`)
+    return Response.json({ ok: true, skipped: 'already ran today' })
+  }
 
   // 1) Obuna tugashiga 3 kun qolganda
   const soon = await q<{ id: string; owner_id: string; name: string; sub_until: Date }>(
